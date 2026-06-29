@@ -26,7 +26,8 @@ def init_db():
                 is_organic      INTEGER NOT NULL,
                 quantity_kg     REAL NOT NULL,
                 notes           TEXT DEFAULT '',
-                tamper_detected INTEGER DEFAULT 0
+                tamper_detected INTEGER DEFAULT 0,
+                suspended       INTEGER DEFAULT 0
             );
             CREATE TABLE IF NOT EXISTS handlers (
                 id        INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,4 +38,15 @@ def init_db():
                 timestamp TEXT,
                 FOREIGN KEY (batch_id) REFERENCES batches(batch_id)
             );
+            CREATE TABLE IF NOT EXISTS fraud_reports (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                batch_id      TEXT NOT NULL,
+                consumer_id   TEXT,
+                reason        TEXT NOT NULL,
+                created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
         """)
+        try:
+            conn.execute("ALTER TABLE batches ADD COLUMN suspended INTEGER DEFAULT 0")
+        except sqlite3.OperationalError:
+            pass

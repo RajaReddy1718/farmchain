@@ -1,8 +1,10 @@
 from fastapi import APIRouter
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from database import get_conn
+from blockchain import is_batch_suspended_on_chain
 
 router = APIRouter()
+
 
 def _get_batch_data(batch_id: str):
     with get_conn() as conn:
@@ -17,9 +19,15 @@ def _get_batch_data(batch_id: str):
 @router.get("/{batch_id}", response_class=HTMLResponse)
 def verify_product(batch_id: str, format: str = "html"):
     b, handlers = _get_batch_data(batch_id)
+    suspended = False
+    if b is not None:
+        with get_conn() as conn:
+            row = conn.execute("SELECT suspended FROM batches WHERE batch_id=?", (batch_id,)).fetchone()
+        suspended = bool(row["suspended"]) if row else False
+        if not suspended:
+            suspended = is_batch_suspended_on_chain(batch_id)
 
     if format == "json":
-        from fastapi.responses import JSONResponse
         if not b:
             return JSONResponse({"verified": False, "error": "Product not found"})
         return JSONResponse({
@@ -29,17 +37,18 @@ def verify_product(batch_id: str, format: str = "html"):
             "farmer": b["farmer_wallet"],
             "organic": bool(b["is_organic"]),
             "tamper_detected": bool(b["tamper_detected"]),
+            "suspended": suspended,
             "supply_chain": [
                 {**h, "tamper": bool(h["tamper"])} for h in handlers
             ],
-            "trust_score": "HIGH" if b["is_organic"] and not b["tamper_detected"] else "COMPROMISED"
+            "trust_score": "SUSPENDED" if suspended else ("HIGH" if b["is_organic"] and not b["tamper_detected"] else "COMPROMISED")
         })
 
     if not b:
         return HTMLResponse(_not_found_html(batch_id), status_code=404)
 
-    trust = "HIGH" if b["is_organic"] and not b["tamper_detected"] else "COMPROMISED"
-    return HTMLResponse(_product_html(batch_id, b, handlers, trust))
+    trust = "SUSPENDED" if suspended else ("HIGH" if b["is_organic"] and not b["tamper_detected"] else "COMPROMISED")
+    return HTMLResponse(_product_html(batch_id, b, handlers, trust, suspended=suspended))
 
 
 def _not_found_html(batch_id):
@@ -54,9 +63,13 @@ def _not_found_html(batch_id):
 <body><div class="card"><h2>Product Not Found</h2><p>Batch <code>{batch_id}</code> has no record in FarmChain.</p></div></body></html>"""
 
 
-def _product_html(batch_id, b, handlers, trust):
+def _product_html(batch_id, b, handlers, trust, suspended=False):
     organic_badge = '<span class="badge green">USDA Organic</span>' if b["is_organic"] else '<span class="badge grey">Conventional</span>'
-    trust_badge = f'<span class="badge {"green" if trust == "HIGH" else "red"}">{trust} TRUST</span>'
+    trust_color = "green" if trust == "HIGH" else "red"
+    trust_badge = f'<span class="badge {trust_color}">{trust} TRUST</span>'
+    report_banner = ''
+    if suspended:
+        report_banner = '<div class="alert">⚠️ This batch has been suspended due to fraud reports.</div>'
 
     steps = ""
     for h in handlers:
@@ -103,6 +116,10 @@ def _product_html(batch_id, b, handlers, trust):
   .muted{{color:#888;font-size:.9rem}}
   .id{{font-size:.75rem;color:#aaa;margin-top:16px;text-align:center}}
   .logo{{text-align:center;font-weight:700;color:#2d6a2d;margin-bottom:20px;font-size:1.1rem;letter-spacing:.5px}}
+  .alert{{background:#fff3cd;color:#8a6d3b;border:1px solid #ffeeba;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:.9rem}}
+  .report-form{{display:flex;flex-direction:column;gap:8px;margin-top:12px}}
+  .report-form textarea{{min-height:80px;padding:10px;border:1px solid #ddd;border-radius:8px}}
+  .report-form button{{padding:10px 12px;border:none;border-radius:8px;background:#2563eb;color:white;font-weight:600}}
 </style>
 </head>
 <body>
@@ -113,12 +130,38 @@ def _product_html(batch_id, b, handlers, trust):
     <div class="sub">Batch #{batch_id}</div>
     {organic_badge}
     {trust_badge}
+    {report_banner}
     <hr class="divider">
     <h3>Product Details</h3>
     <div class="row"><span>Harvest Date</span><span>{b['harvest_date']}</span></div>
     <div class="row"><span>Quantity</span><span>{b['quantity_kg']} kg</span></div>
     <div class="row"><span>Farmer Wallet</span><span style="font-size:.78rem;word-break:break-all">{b['farmer_wallet']}</span></div>
     {'<div class="row"><span>Notes</span><span>' + b["notes"] + '</span></div>' if b["notes"] else ""}
+  </div>
+
+  <div class="card">
+    <h3>Report this product</h3>
+    <form class="report-form" id="reportForm">
+      <textarea id="reportReason" placeholder="Describe the issue or suspected fraud"></textarea>
+      <button type="submit">Submit report</button>
+      <div id="reportStatus" class="muted"></div>
+    </form>
+    <script>
+      const form = document.getElementById('reportForm');
+      const reason = document.getElementById('reportReason');
+      const status = document.getElementById('reportStatus');
+      form.addEventListener('submit', async (event) => {{
+        event.preventDefault();
+        status.textContent = 'Submitting...';
+        const response = await fetch('/reports/report/{batch_id}', {{
+          method: 'POST',
+          headers: {{'Content-Type': 'application/json'}},
+          body: JSON.stringify({{reason: reason.value}})
+        }});
+        const data = await response.json();
+        status.textContent = data.status === 'reported' ? 'Report received.' : (data.error || 'Unable to submit report.');
+      }});
+    </script>
   </div>
 
   <div class="card">

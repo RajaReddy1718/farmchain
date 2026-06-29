@@ -19,6 +19,20 @@ CONTRACT_ABI = [
         "type": "function"
     },
     {
+        "inputs": [{"internalType": "string", "name": "batchId", "type": "string"}],
+        "name": "suspendBatch",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{"internalType": "string", "name": "batchId", "type": "string"}],
+        "name": "isSuspended",
+        "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {"internalType": "string", "name": "batchId", "type": "string"},
             {"internalType": "string", "name": "cropName", "type": "string"},
@@ -83,6 +97,15 @@ CONTRACT_ABI = [
         ],
         "name": "TamperAlert",
         "type": "event"
+    },
+    {
+        "anonymous": False,
+        "inputs": [
+            {"indexed": False, "internalType": "string", "name": "batchId", "type": "string"},
+            {"indexed": False, "internalType": "uint256", "name": "timestamp", "type": "uint256"}
+        ],
+        "name": "BatchSuspended",
+        "type": "event"
     }
 ]
 
@@ -129,6 +152,21 @@ def add_handler_on_chain(batch_id, handler_info, tamper, private_key):
         contract.functions.addHandler(batch_id, handler_info, tamper),
         private_key
     )
+
+
+def suspend_batch_on_chain(batch_id, private_key):
+    contract = get_contract()
+    if not contract:
+        return {"status": "blockchain not configured"}
+    return _send_tx(contract.functions.suspendBatch(batch_id), private_key)
+
+
+def is_batch_suspended_on_chain(batch_id):
+    contract = get_contract()
+    if not contract:
+        return False
+    return bool(contract.functions.isSuspended(batch_id).call())
+
 
 def get_batch_from_chain(batch_id):
     contract = get_contract()
