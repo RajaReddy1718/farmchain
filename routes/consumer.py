@@ -140,6 +140,22 @@ def _product_html(batch_id, b, handlers, trust, suspended=False):
   </div>
 
   <div class="card">
+    <h3>Sensor Reading</h3>
+    <div id="sensorInfo" class="muted">Loading sensor data…</div>
+    <script>
+      const sensorInfo = document.getElementById('sensorInfo');
+      fetch('/sensor/record/{batch_id}', {{ method: 'POST' }})
+        .then(response => response.json())
+        .then(data => {{
+          sensorInfo.innerHTML = '<strong>EC Reading:</strong> ' + data.ec_value + ' <br><strong>Status:</strong> ' + data.status + ' <br><strong>Tamper:</strong> ' + (data.tampered ? 'Detected' : 'Intact');
+        }})
+        .catch(() => {{
+          sensorInfo.textContent = 'Sensor data unavailable.';
+        }});
+    </script>
+  </div>
+
+  <div class="card">
     <h3>Report this product</h3>
     <form class="report-form" id="reportForm">
       <textarea id="reportReason" placeholder="Describe the issue or suspected fraud"></textarea>

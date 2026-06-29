@@ -69,3 +69,74 @@ Private Key: 0xdf57089febbacf7ba0bc227dafbffa9fc08a93fdc68e1e42411a14efcf23656e
 [1mWARNING: These accounts, and their private keys, are publicly known.[22m
 [1mAny funds sent to them on Mainnet or any other live network WILL BE LOST.[22m
 
+[32meth_accounts[0m
+[32mhardhat_metadata[0m
+[32mhardhat_metadata (2)[0m
+[32mhardhat_metadata (3)[0m
+[32mhardhat_metadata (4)[0m
+[32mhardhat_metadata (5)[0m
+[32mhardhat_metadata (6)[0m
+[32mhardhat_metadata (7)[0m
+[32mhardhat_metadata (8)[0m
+[32mhardhat_metadata (9)[0m
+[32mhardhat_metadata (10)[0m
+[32mhardhat_metadata (11)[0m
+[32mhardhat_metadata (12)[0m
+[32mhardhat_metadata (13)[0m
+[32mhardhat_metadata (14)[0m
+[32mhardhat_metadata (15)[0m
+[32mhardhat_metadata (16)[0m
+[32mhardhat_metadata (17)[0m
+[32mhardhat_metadata (18)[0m
+[32mhardhat_metadata (19)[0m
+[32mhardhat_metadata (20)[0m
+[32meth_blockNumber[0m
+[32meth_getBlockByNumber[0m
+[32meth_feeHistory[0m
+[32meth_maxPriorityFeePerGas[0m
+[32meth_sendTransaction[0m
+  Contract deployment: FarmChain
+  Contract address:    0x5fbdb2315678afecb367f032d93f642f64180aa3
+  Transaction:         0x1286330af44b43d4f20a64ae60babb1435235aaf57d829b3e5132d474dc7be11
+  From:                0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+  Value:               0 ETH
+  Gas used:            1484845 of 16777216
+  Block #1:            0x86149173264e29f1f31e3704e2b4ebe2e49ea424f9288f3e25b5e21f969d2049
+
+[32meth_getTransactionByHash[0m
+[32meth_getTransactionReceipt[0m
+[32meth_getTransactionCount[0m
+[32meth_gasPrice[0m
+[32meth_chainId[0m
+[32meth_sendRawTransaction[0m
+  Contract call:       FarmChain#suspendBatch
+  Transaction:         0x83b5a4aa36d07fc92fdf75fc950f4661bcab6063d5d353b392cdc92cd9ddce1d
+  From:                0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+  To:                  0x5fbdb2315678afecb367f032d93f642f64180aa3
+  Value:               0 ETH
+  Gas used:            49648 of 300000
+  Block #2:            0x7b779548a5d0b7913d56f6f35d3ed78e6fd392f7da8dd309f88677f5ff9d822f
+
+[32meth_chainId[0m
+[32meth_accounts[0m
+[32meth_call[0m
+  Contract call:       FarmChain#isSuspended
+  From:                0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+  To:                  0x5fbdb2315678afecb367f032d93f642f64180aa3
+
+[32meth_chainId[0m
+[32meth_getTransactionCount[0m
+[32meth_gasPrice[0m
+[32meth_chainId[0m
+[31meth_sendRawTransaction[0m
+  Contract call:       FarmChain#<unrecognized-selector>
+  Transaction:         0xc6db9e3e0a7385562512c2fbc43d3dc572a3c74b9e37f091761ecfb2c211ba2b
+  From:                0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+  To:                  0x5fbdb2315678afecb367f032d93f642f64180aa3
+  Value:               0 ETH
+  Gas used:            23150 of 300000
+  Block #3:            0x3ab7bd66764a55e8f1cea849e5ce9d9547f52c00235b90810dab8f4fbf2e1839
+
+  Error: Transaction reverted without a reason
+
+[32meth_getCode[0m

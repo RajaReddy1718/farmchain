@@ -20,11 +20,13 @@ contract FarmChain {
     mapping(string => Batch) public batches;
     mapping(address => string) public farmers;
     mapping(string => bool) public suspendedBatches;
+    mapping(string => bool) public sensorApproved;
 
     event BatchRegistered(string batchId, address farmer, string cropName);
     event HandlerAdded(string batchId, string handler);
     event TamperAlert(string batchId, string handler);
     event BatchSuspended(string batchId, uint256 timestamp);
+    event SensorReadingRecorded(string batchId, uint256 ecValue, bool tampered, bool approved);
 
     constructor() {
         owner = msg.sender;
@@ -73,6 +75,16 @@ contract FarmChain {
     function suspendBatch(string memory batchId) public onlyOwner {
         suspendedBatches[batchId] = true;
         emit BatchSuspended(batchId, block.timestamp);
+    }
+
+    function recordSensorReading(
+        string memory batchId,
+        uint256 ecValue,
+        bool tampered
+    ) public onlyOwner {
+        bool approved = !tampered && ecValue > 0 && ecValue <= 250;
+        sensorApproved[batchId] = approved;
+        emit SensorReadingRecorded(batchId, ecValue, tampered, approved);
     }
 
     function isSuspended(string memory batchId) public view returns (bool) {

@@ -38,6 +38,14 @@ def init_db():
                 timestamp TEXT,
                 FOREIGN KEY (batch_id) REFERENCES batches(batch_id)
             );
+            CREATE TABLE IF NOT EXISTS sensor_readings (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                batch_id      TEXT NOT NULL,
+                ec_value      REAL NOT NULL,
+                tampered      INTEGER NOT NULL,
+                status        TEXT NOT NULL,
+                created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
             CREATE TABLE IF NOT EXISTS fraud_reports (
                 id            INTEGER PRIMARY KEY AUTOINCREMENT,
                 batch_id      TEXT NOT NULL,

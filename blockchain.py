@@ -26,6 +26,17 @@ CONTRACT_ABI = [
         "type": "function"
     },
     {
+        "inputs": [
+            {"internalType": "string", "name": "batchId", "type": "string"},
+            {"internalType": "uint256", "name": "ecValue", "type": "uint256"},
+            {"internalType": "bool", "name": "tampered", "type": "bool"}
+        ],
+        "name": "recordSensorReading",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [{"internalType": "string", "name": "batchId", "type": "string"}],
         "name": "isSuspended",
         "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
@@ -106,6 +117,17 @@ CONTRACT_ABI = [
         ],
         "name": "BatchSuspended",
         "type": "event"
+    },
+    {
+        "anonymous": False,
+        "inputs": [
+            {"indexed": False, "internalType": "string", "name": "batchId", "type": "string"},
+            {"indexed": False, "internalType": "uint256", "name": "ecValue", "type": "uint256"},
+            {"indexed": False, "internalType": "bool", "name": "tampered", "type": "bool"},
+            {"indexed": False, "internalType": "bool", "name": "approved", "type": "bool"}
+        ],
+        "name": "SensorReadingRecorded",
+        "type": "event"
     }
 ]
 
@@ -159,6 +181,16 @@ def suspend_batch_on_chain(batch_id, private_key):
     if not contract:
         return {"status": "blockchain not configured"}
     return _send_tx(contract.functions.suspendBatch(batch_id), private_key)
+
+
+def record_sensor_reading_on_chain(batch_id, ec_value, tampered, private_key):
+    contract = get_contract()
+    if not contract:
+        return {"status": "blockchain not configured"}
+    return _send_tx(
+        contract.functions.recordSensorReading(batch_id, int(ec_value), bool(tampered)),
+        private_key,
+    )
 
 
 def is_batch_suspended_on_chain(batch_id):
