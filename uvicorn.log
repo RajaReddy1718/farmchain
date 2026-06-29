@@ -1,0 +1,9 @@
+INFO:     Started server process [46284]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:61048 - "POST /farmer/register HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:61050 - "POST /farmer/register HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:61052 - "GET /verify/DB001 HTTP/1.1" 200 OK
+INFO:     2600:8804:48a:da00:bd81:a58:6f46:fb4:0 - "GET / HTTP/1.1" 200 OK
+INFO:     2600:8804:48a:da00:bd81:a58:6f46:fb4:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="FarmChain">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.json">
+  <title>FarmChain App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <h1>FarmChain App</h1>
+      <p>Register farmers, batches, track transport and verify products.</p>
+    </header>
+
+    <section class="panel">
+      <h2>Login</h2>
+      <div class="form-grid">
+        <input id="loginUsername" placeholder="Username" autocomplete="username">
+        <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
+      </div>
+      <button id="loginBtn">Login</button>
+      <div class="login-help">Or paste your API key below if you do not want login.</div>
+      <input id="apiKey" type="password" placeholder="Enter API key" autocomplete="off">
+      <div id="loginStatus" class="status">Not logged in</div>
+    </section>
+
+    <section class="panel">
+      <h2>Register Farmer</h2>
+      <div class="form-grid">
+        <input id="farmerWallet" placeholder="Wallet Address">
+        <input id="farmerName" placeholder="Farmer Name">
+        <input id="farmName" placeholder="Farm Name">
+        <input id="farmerLocation" placeholder="Location">
+        <input id="farmerCertification" placeholder="Certification">
+      </div>
+      <button id="registerFarmerBtn">Register Farmer</button>
+    </section>
+
+    <section class="panel">
+      <h2>Register Batch</h2>
+      <div class="form-grid">
+        <input id="batchId" placeholder="Batch ID">
+        <input id="batchFarmerWallet" placeholder="Farmer Wallet">
+        <input id="cropName" placeholder="Crop Name">
+        <input id="harvestDate" type="date" placeholder="Harvest Date">
+        <label class="checkbox-inline"><input id="batchOrganic" type="checkbox"> Organic</label>
+        <input id="quantityKg" type="number" step="0.1" placeholder="Quantity (kg)">
+        <input id="batchNotes" placeholder="Notes">
+      </div>
+      <button id="registerBatchBtn">Register Batch</button>
+    </section>
+
+    <section class="panel">
+      <h2>Update Transport</h2>
+      <div class="form-grid">
+        <input id="transportBatchId" placeholder="Batch ID">
+        <input id="handler" placeholder="Handler">
+        <input id="transportLocation" placeholder="Location">
+        <label class="checkbox-inline"><input id="tamperDetected" type="checkbox"> Tamper detected</label>
+        <input id="timestamp" type="datetime-local" placeholder="Timestamp">
+      </div>
+      <button id="updateTransportBtn">Update Transport</button>
+    </section>
+
+    <section class="panel">
+      <h2>Verify Batch</h2>
+      <div class="form-grid">
+        <input id="verifyBatchId" placeholder="Batch ID">
+      </div>
+      <button id="verifyBatchBtn">Verify Batch</button>
+      <div id="verifyResult" class="result"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Response</h2>
+      <pre id="responseOutput">Ready.</pre>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

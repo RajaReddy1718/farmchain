@@ -1,0 +1,118 @@
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f3f6fb;
+  color: #17213b;
+}
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+.app-shell {
+  width: min(1024px, calc(100% - 24px));
+  margin: 24px auto;
+}
+header {
+  padding: 24px;
+  margin-bottom: 18px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 16px 30px rgba(55, 75, 120, 0.08);
+}
+header h1 {
+  margin: 0 0 8px;
+}
+header p {
+  margin: 0;
+  color: #4b5563;
+}
+.panel {
+  background: #ffffff;
+  border-radius: 18px;
+  margin-bottom: 18px;
+  padding: 20px;
+  box-shadow: 0 12px 24px rgba(55, 75, 120, 0.06);
+}
+.panel h2 {
+  margin-top: 0;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+input[type='text'],
+input[type='password'],
+input[type='date'],
+input[type='datetime-local'],
+input[type='number'] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  outline: none;
+  font-size: 0.95rem;
+}
+input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
+}
+button {
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-size: 1rem;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+button:hover {
+  background: #1d4ed8;
+}
+.status {
+  margin-top: 12px;
+  color: #2563eb;
+  font-weight: 600;
+}
+.login-help {
+  margin: 10px 0 4px;
+  font-size: 0.92rem;
+  color: #6b7280;
+}
+.result {
+  margin-top: 12px;
+  color: #111827;
+}
+@media (max-width: 720px) {
+  .app-shell {
+    margin: 16px;
+  }
+  .panel {
+    padding: 18px;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  color: #1f2937;
+}
+.checkbox-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+small {
+  display: block;
+  color: #6b7280;
+  margin-top: 6px;
+}
